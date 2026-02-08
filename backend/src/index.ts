@@ -5,6 +5,7 @@ import { PrismaClient } from '@prisma/client';
 import authRouter from './routes/auth';
 import listingsRouter from './routes/listings';
 import messagesRouter from './routes/messages';
+import uploadRouter from './routes/upload';
 
 // Initialize Prisma client
 const prisma = new PrismaClient();
@@ -37,6 +38,7 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authRouter);
 app.use('/api/listings', listingsRouter);
 app.use('/api/messages', messagesRouter);
+app.use('/api/upload', uploadRouter);
 
 // 404 handler
 app.use((req, res) => {

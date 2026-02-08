@@ -6,10 +6,18 @@ export default function Home() {
       {/* Navigation */}
       <nav className="bg-white shadow-sm border-b border-primary-100">
         <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="text-2xl font-bold text-primary-600">GearHub</div>
+          <Link href="/" className="text-2xl font-bold text-primary-600 hover:text-primary-700">
+            GearHub
+          </Link>
           <div className="flex gap-4">
             <Link href="/listings" className="text-gray-700 hover:text-primary-600">
               Browse Gear
+            </Link>
+            <Link href="/listings/create" className="text-gray-700 hover:text-primary-600 font-semibold">
+              Sell Gear
+            </Link>
+            <Link href="/messages" className="text-gray-700 hover:text-primary-600">
+              Messages
             </Link>
             <Link href="/auth/login" className="text-gray-700 hover:text-primary-600">
               Login
