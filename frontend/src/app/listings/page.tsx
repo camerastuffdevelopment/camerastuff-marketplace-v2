@@ -1,23 +1,61 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import api from '@/lib/api';
 import { Listing } from '@/types';
 
+const CATEGORIES = [
+  { id: 'cameras', name: 'Cameras' },
+  { id: 'lenses', name: 'Lenses' },
+  { id: 'lighting', name: 'Lighting' },
+  { id: 'tripods', name: 'Tripods & Stands' },
+  { id: 'bags', name: 'Bags & Cases' },
+  { id: 'accessories', name: 'Accessories' },
+];
+
+const CONDITIONS = [
+  { value: 'new', label: 'New' },
+  { value: 'excellent', label: 'Excellent' },
+  { value: 'good', label: 'Good' },
+  { value: 'fair', label: 'Fair' },
+  { value: 'parts', label: 'Parts' },
+];
+
+const SORT_OPTIONS = [
+  { value: 'newest', label: 'Newest First' },
+  { value: 'oldest', label: 'Oldest First' },
+  { value: 'price_asc', label: 'Price: Low to High' },
+  { value: 'price_desc', label: 'Price: High to Low' },
+];
+
 export default function ListingsPage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
+
   const [listings, setListings] = useState<Listing[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [totalListings, setTotalListings] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
+  // Filter states
   const [search, setSearch] = useState(searchParams.get('search') || '');
   const [category, setCategory] = useState(searchParams.get('category') || '');
   const [condition, setCondition] = useState(searchParams.get('condition') || '');
   const [minPrice, setMinPrice] = useState(searchParams.get('minPrice') || '');
   const [maxPrice, setMaxPrice] = useState(searchParams.get('maxPrice') || '');
   const [location, setLocation] = useState(searchParams.get('location') || '');
+  const [sort, setSort] = useState(searchParams.get('sort') || 'newest');
   const [page, setPage] = useState(1);
+
+  const [showFilters, setShowFilters] = useState(false);
+
+  // Count active filters
+  const activeFilterCount = [search, category, condition, minPrice, maxPrice, location].filter(
+    (f) => f
+  ).length;
 
   // Fetch listings
   useEffect(() => {
@@ -31,12 +69,15 @@ export default function ListingsPage() {
         if (minPrice) params.append('minPrice', minPrice);
         if (maxPrice) params.append('maxPrice', maxPrice);
         if (location) params.append('location', location);
+        params.append('sort', sort);
         params.append('page', page.toString());
         params.append('limit', '12');
 
         const response = await api.get(`/api/listings?${params.toString()}`);
         if (response.data.success) {
           setListings(response.data.data);
+          setTotalListings(response.data.pagination?.total || 0);
+          setTotalPages(response.data.pagination?.pages || 0);
         }
       } catch (error) {
         console.error('Failed to fetch listings:', error);
@@ -46,10 +87,21 @@ export default function ListingsPage() {
     };
 
     fetchListings();
-  }, [search, category, condition, minPrice, maxPrice, location, page]);
+  }, [search, category, condition, minPrice, maxPrice, location, sort, page]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    setPage(1);
+  };
+
+  const clearFilters = () => {
+    setSearch('');
+    setCategory('');
+    setCondition('');
+    setMinPrice('');
+    setMaxPrice('');
+    setLocation('');
+    setSort('newest');
     setPage(1);
   };
 
@@ -62,6 +114,7 @@ export default function ListingsPage() {
 
           {/* Search and Filters */}
           <form onSubmit={handleSearch} className="space-y-4">
+            {/* Search and Location Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <input
@@ -83,7 +136,8 @@ export default function ListingsPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            {/* Filters Row */}
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
@@ -127,13 +181,43 @@ export default function ListingsPage() {
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
 
+              <select
+                value={sort}
+                onChange={(e) => {
+                  setSort(e.target.value);
+                  setPage(1);
+                }}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              >
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="price_asc">Price: Low to High</option>
+                <option value="price_desc">Price: High to Low</option>
+              </select>
+
               <button
                 type="submit"
-                className="bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
+                className="bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors col-span-2 md:col-span-1"
               >
                 Search
               </button>
             </div>
+
+            {/* Active Filters and Clear Button */}
+            {activeFilterCount > 0 && (
+              <div className="flex items-center justify-between bg-primary-50 p-3 rounded-lg border border-primary-200">
+                <span className="text-sm text-primary-900 font-medium">
+                  {activeFilterCount} filter{activeFilterCount !== 1 ? 's' : ''} applied
+                </span>
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="text-sm text-primary-600 hover:text-primary-700 font-semibold underline"
+                >
+                  Clear all
+                </button>
+              </div>
+            )}
           </form>
         </div>
       </div>
