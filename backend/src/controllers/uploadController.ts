@@ -40,7 +40,7 @@ export async function uploadSingleImage(req: Request, res: Response): Promise<vo
     if (error instanceof z.ZodError) {
       res.status(400).json({
         success: false,
-        error: error.errors[0].message,
+        error: error.issues[0].message,
       });
       return;
     }
@@ -80,7 +80,7 @@ export async function uploadMultiple(req: Request, res: Response): Promise<void>
     if (error instanceof z.ZodError) {
       res.status(400).json({
         success: false,
-        error: error.errors[0].message,
+        error: error.issues[0].message,
       });
       return;
     }

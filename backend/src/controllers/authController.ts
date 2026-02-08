@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import jwt, { Secret } from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 import { config } from '../config/env';
 import { UserResponse } from '../types';
@@ -44,7 +44,7 @@ function generateToken(userId: string, email: string): string {
       userId,
       email,
     },
-    config.JWT_SECRET,
+    config.JWT_SECRET as Secret,
     {
       expiresIn: config.JWT_EXPIRE,
     }
@@ -99,7 +99,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
     if (error instanceof z.ZodError) {
       res.status(400).json({
         success: false,
-        error: error.errors[0].message,
+        error: error.issues[0].message,
       });
       return;
     }
@@ -160,7 +160,7 @@ export async function login(req: Request, res: Response): Promise<void> {
     if (error instanceof z.ZodError) {
       res.status(400).json({
         success: false,
-        error: error.errors[0].message,
+        error: error.issues[0].message,
       });
       return;
     }

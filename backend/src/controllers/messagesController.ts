@@ -95,7 +95,7 @@ export async function sendMessage(req: Request, res: Response): Promise<void> {
     if (error instanceof z.ZodError) {
       res.status(400).json({
         success: false,
-        error: error.errors[0].message,
+        error: error.issues[0].message,
       });
       return;
     }

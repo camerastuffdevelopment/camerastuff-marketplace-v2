@@ -91,7 +91,7 @@ export async function createListing(req: Request, res: Response): Promise<void> 
     if (error instanceof z.ZodError) {
       res.status(400).json({
         success: false,
-        error: error.errors[0].message,
+        error: error.issues[0].message,
       });
       return;
     }
@@ -142,7 +142,7 @@ export async function getListing(req: Request, res: Response): Promise<void> {
       success: true,
       data: {
         ...formatListingResponse(listing),
-        seller: listing.user,
+        seller: (listing as any).user,
       },
     });
   } catch (error) {
@@ -258,7 +258,7 @@ export async function listListings(req: Request, res: Response): Promise<void> {
     if (error instanceof z.ZodError) {
       res.status(400).json({
         success: false,
-        error: error.errors[0].message,
+        error: error.issues[0].message,
       });
       return;
     }
@@ -323,7 +323,7 @@ export async function updateListing(req: Request, res: Response): Promise<void> 
     if (error instanceof z.ZodError) {
       res.status(400).json({
         success: false,
-        error: error.errors[0].message,
+        error: error.issues[0].message,
       });
       return;
     }
