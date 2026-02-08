@@ -67,6 +67,7 @@ export interface Session {
     email: string;
     name: string;
     image: string | null;
+    token?: string; // JWT token for API requests
   };
   expires: string;
 }

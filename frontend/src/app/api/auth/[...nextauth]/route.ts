@@ -61,6 +61,10 @@ const authOptions: NextAuthOptions = {
     async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id;
+        // Store token from login response if available
+        if ('token' in user) {
+          token.apiToken = (user as any).token;
+        }
       }
       return token;
     },
@@ -68,6 +72,10 @@ const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
+        // Pass API token to session for use in API calls
+        if (token.apiToken) {
+          (session.user as any).token = token.apiToken;
+        }
       }
       return session;
     },

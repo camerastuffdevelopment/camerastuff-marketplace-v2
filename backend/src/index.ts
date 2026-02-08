@@ -2,6 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import { config } from './config/env';
 import { PrismaClient } from '@prisma/client';
+import authRouter from './routes/auth';
+import listingsRouter from './routes/listings';
+import messagesRouter from './routes/messages';
 
 // Initialize Prisma client
 const prisma = new PrismaClient();
@@ -29,11 +32,6 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
-
-// Import routes
-import authRouter from './routes/auth';
-import listingsRouter from './routes/listings';
-import messagesRouter from './routes/messages';
 
 // Mount routes
 app.use('/api/auth', authRouter);

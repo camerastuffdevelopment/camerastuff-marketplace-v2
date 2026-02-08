@@ -13,14 +13,16 @@ const api: AxiosInstance = axios.create({
 // Add JWT token to requests
 api.interceptors.request.use(
   async (config) => {
-    const session = await getSession();
-    if (session?.user?.email) {
-      // Note: In a real implementation, you'd store and use the JWT token from NextAuth
-      // For now, this is a placeholder for token handling
-      // const token = await getToken({ req });
-      // if (token) {
-      //   config.headers.Authorization = `Bearer ${token}`;
-      // }
+    try {
+      const session = await getSession();
+      if (session?.user && 'token' in session.user) {
+        const token = (session.user as any).token;
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+      }
+    } catch (error) {
+      console.error('Error getting session:', error);
     }
     return config;
   },
@@ -34,8 +36,7 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Handle unauthorized error (redirect to login)
-      console.error('Unauthorized');
+      console.error('Unauthorized - credentials may be invalid');
     }
     return Promise.reject(error);
   }
