@@ -33,12 +33,12 @@ app.get('/health', (req, res) => {
 // Import routes
 import authRouter from './routes/auth';
 import listingsRouter from './routes/listings';
-// import messagesRouter from './routes/messages';
+import messagesRouter from './routes/messages';
 
 // Mount routes
 app.use('/api/auth', authRouter);
 app.use('/api/listings', listingsRouter);
-// app.use('/api/messages', messagesRouter);
+app.use('/api/messages', messagesRouter);
 
 // 404 handler
 app.use((req, res) => {

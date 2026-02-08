@@ -195,10 +195,10 @@ export default function ListingDetailPage({ params }: { params: { id: string } }
                 </div>
               ) : (
                 <Link
-                  href={`/messages?listing_id=${listing.id}`}
+                  href={`/messages?listing_id=${listing.id}&user_id=${listing.user_id}`}
                   className="block w-full bg-primary-600 text-white font-semibold py-2 rounded-lg hover:bg-primary-700 transition-colors text-center"
                 >
-                  Send Message
+                  💬 Send Message to Seller
                 </Link>
               )}
             </div>
