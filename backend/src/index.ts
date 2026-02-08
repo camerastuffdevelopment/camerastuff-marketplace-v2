@@ -74,7 +74,7 @@ process.on('SIGINT', async () => {
 // Start server
 const PORT = parseInt(config.PORT, 10) || 5000;
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`✓ Server running on http://localhost:${PORT}`);
   console.log(`✓ Environment: ${config.NODE_ENV}`);
   console.log(`✓ Frontend URL: ${config.FRONTEND_URL}`);
