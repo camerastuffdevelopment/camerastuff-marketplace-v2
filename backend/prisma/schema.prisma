@@ -87,7 +87,6 @@ model Listing {
   @@index([user_id])
   @@index([category_id])
   @@index([status])
-  @@fulltext([title, description]) // PostgreSQL full-text search
 }
 
 // Category model
