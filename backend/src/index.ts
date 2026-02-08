@@ -30,9 +30,13 @@ app.get('/health', (req, res) => {
   });
 });
 
-// TODO: Import and use routes
+// Import routes
+import authRouter from './routes/auth';
 // import listingsRouter from './routes/listings';
 // import messagesRouter from './routes/messages';
+
+// Mount routes
+app.use('/api/auth', authRouter);
 // app.use('/api/listings', listingsRouter);
 // app.use('/api/messages', messagesRouter);
 
