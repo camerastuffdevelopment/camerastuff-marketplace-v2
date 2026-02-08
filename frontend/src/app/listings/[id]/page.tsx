@@ -181,16 +181,16 @@ export default function ListingDetailPage({ params }: { params: { id: string } }
                 <div className="space-y-2">
                   <Link
                     href={`/listings/${listing.id}/edit`}
-                    className="block w-full bg-primary-600 text-white font-semibold py-2 rounded-lg hover:bg-primary-700 transition-colors text-center"
+                    className="block w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition-colors text-center"
                   >
-                    Edit Listing
+                    ✏️ Edit Listing
                   </Link>
                   <button
                     onClick={handleDelete}
                     disabled={isDeleting}
                     className="w-full bg-red-600 text-white font-semibold py-2 rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors"
                   >
-                    {isDeleting ? 'Deleting...' : 'Delete Listing'}
+                    {isDeleting ? 'Deleting...' : '🗑️ Delete Listing'}
                   </button>
                 </div>
               ) : (
