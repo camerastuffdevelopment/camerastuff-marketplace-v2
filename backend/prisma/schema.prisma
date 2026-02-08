@@ -1,0 +1,191 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  password_hash     String?   // nullable for OAuth users
+  first_name        String
+  last_name         String
+  profile_image_url String?   // Cloudinary URL
+  bio               String?
+  phone_number      String?
+  location          String?   // City/Province
+
+  // Verification fields
+  email_verified    Boolean   @default(false)
+  phone_verified    Boolean   @default(false)
+  id_verified       Boolean   @default(false)
+  verification_documents Json? // For flexible verification types
+
+  // Relationships
+  listings          Listing[]
+  sent_messages     Message[] @relation("sender")
+  received_messages Message[] @relation("recipient")
+  reviews_given     Review[]  @relation("reviewer")
+  reviews_received  Review[]  @relation("reviewee")
+  transactions_buyer  Transaction[] @relation("buyer")
+  transactions_seller Transaction[] @relation("seller")
+
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
+}
+
+// Listing model for equipment listings
+model Listing {
+  id                String    @id @default(cuid())
+  user_id           String
+  user              User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  title             String
+  description       String
+  category_id       String?
+  category          Category? @relation(fields: [category_id], references: [id], onDelete: SetNull)
+
+  condition         String    // new, excellent, good, fair, parts
+  price_zar         Float     // In South African Rands
+  location          String?   // City/Province
+
+  // Images
+  image_urls        String[]  // Array of Cloudinary URLs
+
+  // Specifications stored as JSON for flexibility
+  specifications    Json?     // {brand, model, year, lens_type, etc.}
+
+  // Listing status
+  is_active         Boolean   @default(true)
+  status            String    @default("active") // active, sold, delisted, pending_removal
+
+  // Monetization fields
+  is_featured       Boolean   @default(false)
+  is_promoted       Boolean   @default(false)
+  featured_until    DateTime?
+  promoted_until    DateTime?
+
+  // Stats
+  view_count        Int       @default(0)
+
+  // Relationships
+  messages          Message[]
+  transactions      Transaction[]
+  reviews           Review[]
+
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
+  deleted_at        DateTime? // Soft delete
+
+  // Indexes
+  @@index([user_id])
+  @@index([category_id])
+  @@index([status])
+  @@fulltext([title, description]) // PostgreSQL full-text search
+}
+
+// Category model
+model Category {
+  id                String    @id @default(cuid())
+  name              String    @unique
+  slug              String    @unique
+  description       String?
+  icon_url          String?   // Cloudinary URL
+
+  // Relationships
+  listings          Listing[]
+
+  created_at        DateTime  @default(now())
+}
+
+// Message model for buyer-seller communication
+model Message {
+  id                String    @id @default(cuid())
+  listing_id        String
+  listing           Listing   @relation(fields: [listing_id], references: [id], onDelete: Cascade)
+
+  sender_id         String
+  sender            User      @relation("sender", fields: [sender_id], references: [id], onDelete: Cascade)
+
+  recipient_id      String
+  recipient         User      @relation("recipient", fields: [recipient_id], references: [id], onDelete: Cascade)
+
+  subject           String?
+  message_body      String
+  read_at           DateTime?
+
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
+
+  // Indexes
+  @@index([listing_id])
+  @@index([sender_id])
+  @@index([recipient_id])
+  @@index([created_at(sort: Desc)])
+}
+
+// Transaction model for Phase 2 (Tradesafe integration)
+model Transaction {
+  id                String    @id @default(cuid())
+  listing_id        String
+  listing           Listing   @relation(fields: [listing_id], references: [id], onDelete: Cascade)
+
+  buyer_id          String
+  buyer             User      @relation("buyer", fields: [buyer_id], references: [id], onDelete: Restrict)
+
+  seller_id         String
+  seller            User      @relation("seller", fields: [seller_id], references: [id], onDelete: Restrict)
+
+  amount_zar        Float     // Sale price in ZAR
+  platform_fee_zar  Float?    // 3-5% commission (nullable for non-escrow)
+
+  tradesafe_transaction_id String? // Populated when using Tradesafe
+  status            String    @default("pending") // pending, completed, disputed, refunded, cancelled
+
+  // Relationships
+  reviews           Review[]
+
+  created_at        DateTime  @default(now())
+  completed_at      DateTime?
+  updated_at        DateTime  @updatedAt
+
+  // Indexes
+  @@index([listing_id])
+  @@index([buyer_id])
+  @@index([seller_id])
+  @@index([status])
+}
+
+// Review model for Phase 2
+model Review {
+  id                String    @id @default(cuid())
+  reviewer_id       String
+  reviewer          User      @relation("reviewer", fields: [reviewer_id], references: [id], onDelete: Cascade)
+
+  reviewee_id       String
+  reviewee          User      @relation("reviewee", fields: [reviewee_id], references: [id], onDelete: Cascade)
+
+  listing_id        String
+  listing           Listing   @relation(fields: [listing_id], references: [id], onDelete: Cascade)
+
+  transaction_id    String?   // For Phase 2 transaction reviews
+  transaction       Transaction? @relation(fields: [transaction_id], references: [id], onDelete: SetNull)
+
+  rating            Int       // 1-5 stars
+  comment           String?
+
+  created_at        DateTime  @default(now())
+
+  // Indexes
+  @@index([reviewer_id])
+  @@index([reviewee_id])
+  @@index([listing_id])
+  @@index([transaction_id])
+}
