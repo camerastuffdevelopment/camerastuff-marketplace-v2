@@ -2,8 +2,8 @@
 
 A peer-to-peer marketplace for buying and selling used photography equipment in South Africa.
 
-**Status**: MVP in development
-**Target Launch**: Q2 2026
+**Status**: MVP - Frontend deploying to Vercel, Backend running on Railway
+**Target Launch**: Q1 2026
 
 ## Project Overview
 
