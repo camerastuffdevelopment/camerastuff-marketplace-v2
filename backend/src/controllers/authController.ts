@@ -6,10 +6,7 @@ import { config } from '../config/env';
 import { UserResponse } from '../types';
 import { z } from 'zod';
 
-const prisma = new PrismaClient({
-  // @ts-ignore - datasourceUrl is valid in Prisma 7
-  datasourceUrl: config.DATABASE_URL,
-});
+const prisma = new PrismaClient();
 
 // Validation schemas
 const SignupSchema = z.object({

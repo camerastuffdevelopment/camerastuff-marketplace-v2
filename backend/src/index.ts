@@ -7,12 +7,8 @@ import listingsRouter from './routes/listings';
 import messagesRouter from './routes/messages';
 import uploadRouter from './routes/upload';
 
-// Initialize Prisma client with database URL from environment
-// Prisma 7 requires datasourceUrl when schema has no url field
-const prisma = new PrismaClient({
-  // @ts-ignore - datasourceUrl is valid in Prisma 7
-  datasourceUrl: config.DATABASE_URL,
-});
+// Initialize Prisma client
+const prisma = new PrismaClient();
 
 // Create Express app
 const app = express();
