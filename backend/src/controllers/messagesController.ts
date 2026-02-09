@@ -2,8 +2,12 @@ import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { z } from 'zod';
 import { MessageResponse } from '../types';
+import { config } from '../config/env';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  // @ts-ignore - datasourceUrl is valid in Prisma 7
+  datasourceUrl: config.DATABASE_URL,
+});
 
 // Validation schema
 const SendMessageSchema = z.object({
