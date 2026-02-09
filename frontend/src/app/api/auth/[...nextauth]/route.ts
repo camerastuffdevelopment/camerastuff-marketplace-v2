@@ -1,6 +1,20 @@
-import NextAuth, { type NextAuthOptions } from 'next-auth';
+import NextAuth, { type NextAuthOptions, type DefaultSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import api from '@/lib/api';
+
+// Extend NextAuth types to include custom fields
+declare module 'next-auth' {
+  interface User {
+    id: string;
+    token?: string;
+  }
+  interface Session {
+    user: {
+      id: string;
+      token?: string;
+    } & DefaultSession['user'];
+  }
+}
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -43,7 +57,6 @@ const authOptions: NextAuthOptions = {
 
   pages: {
     signIn: '/auth/login',
-    signUp: '/auth/signup',
     error: '/auth/error',
   },
 
