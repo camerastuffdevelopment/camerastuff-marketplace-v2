@@ -1,0 +1,10 @@
+{
+  "name": "camerastuff-marketplace-v2",
+  "version": "1.0.0",
+  "description": "Photography equipment marketplace for South Africa",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ]
+}
