@@ -3,7 +3,9 @@ import { PrismaClient } from '@prisma/client';
 import { z } from 'zod';
 import { MessageResponse } from '../types';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  datasourceUrl: process.env.DATABASE_URL,
+});
 
 // Validation schema
 const SendMessageSchema = z.object({

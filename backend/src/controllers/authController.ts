@@ -6,7 +6,9 @@ import { config } from '../config/env';
 import { UserResponse } from '../types';
 import { z } from 'zod';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  datasourceUrl: process.env.DATABASE_URL,
+});
 
 // Validation schemas
 const SignupSchema = z.object({

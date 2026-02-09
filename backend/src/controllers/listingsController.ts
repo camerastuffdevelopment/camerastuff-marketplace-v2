@@ -3,7 +3,9 @@ import { PrismaClient } from '@prisma/client';
 import { z } from 'zod';
 import { ListingResponse } from '../types';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  datasourceUrl: process.env.DATABASE_URL,
+});
 
 // Validation schemas
 const CreateListingSchema = z.object({
