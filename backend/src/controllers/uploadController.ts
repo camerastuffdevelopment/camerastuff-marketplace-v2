@@ -26,7 +26,7 @@ export async function uploadSingleImage(req: Request, res: Response): Promise<vo
     }
 
     // Validate request body
-    const validatedData = UploadImageSchema.parse(req.body);
+    const validatedData = UploadImageSchema.parse(req.body) as any;
 
     // Upload to Cloudinary
     const result = await uploadImage(validatedData.image, validatedData.folder);
@@ -40,7 +40,7 @@ export async function uploadSingleImage(req: Request, res: Response): Promise<vo
     if (error instanceof z.ZodError) {
       res.status(400).json({
         success: false,
-        error: error.issues[0].message,
+        error: error.issues?.[0]?.message || 'Validation error',
       });
       return;
     }
@@ -66,7 +66,7 @@ export async function uploadMultiple(req: Request, res: Response): Promise<void>
     }
 
     // Validate request body
-    const validatedData = UploadMultipleSchema.parse(req.body);
+    const validatedData = UploadMultipleSchema.parse(req.body) as any;
 
     // Upload all images to Cloudinary
     const results = await uploadMultipleImages(validatedData.images, validatedData.folder);
@@ -80,7 +80,7 @@ export async function uploadMultiple(req: Request, res: Response): Promise<void>
     if (error instanceof z.ZodError) {
       res.status(400).json({
         success: false,
-        error: error.issues[0].message,
+        error: error.issues?.[0]?.message || 'Validation error',
       });
       return;
     }

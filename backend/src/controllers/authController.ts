@@ -47,14 +47,14 @@ function generateToken(userId: string, email: string): string {
     config.JWT_SECRET as Secret,
     {
       expiresIn: config.JWT_EXPIRE,
-    }
+    } as any
   );
 }
 
 export async function signup(req: Request, res: Response): Promise<void> {
   try {
     // Validate request body
-    const validatedData = SignupSchema.parse(req.body);
+    const validatedData = SignupSchema.parse(req.body) as any;
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -99,7 +99,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
     if (error instanceof z.ZodError) {
       res.status(400).json({
         success: false,
-        error: error.issues[0].message,
+        error: error.issues?.[0]?.message || 'Validation error',
       });
       return;
     }
@@ -115,7 +115,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
 export async function login(req: Request, res: Response): Promise<void> {
   try {
     // Validate request body
-    const validatedData = LoginSchema.parse(req.body);
+    const validatedData = LoginSchema.parse(req.body) as any;
 
     // Find user by email
     const user = await prisma.user.findUnique({
@@ -160,7 +160,7 @@ export async function login(req: Request, res: Response): Promise<void> {
     if (error instanceof z.ZodError) {
       res.status(400).json({
         success: false,
-        error: error.issues[0].message,
+        error: error.issues?.[0]?.message || 'Validation error',
       });
       return;
     }

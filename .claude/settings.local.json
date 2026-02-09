@@ -5,7 +5,11 @@
       "Bash(npm create:*)",
       "Bash(npm init:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(grep:*)",
+      "Bash(npm run build:*)",
+      "Bash(find:*)"
     ]
   }
 }

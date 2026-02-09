@@ -14,7 +14,7 @@ const CreateListingSchema = z.object({
   price_zar: z.number().positive('Price must be positive'),
   location: z.string().optional(),
   image_urls: z.array(z.string().url()).min(1, 'At least one image is required'),
-  specifications: z.record(z.any()).optional(),
+  specifications: z.record(z.string(), z.any()).optional(),
 });
 
 const UpdateListingSchema = CreateListingSchema.partial();
@@ -65,7 +65,7 @@ export async function createListing(req: Request, res: Response): Promise<void> 
     }
 
     // Validate request body
-    const validatedData = CreateListingSchema.parse(req.body);
+    const validatedData = CreateListingSchema.parse(req.body) as any;
 
     // Create listing
     const listing = await prisma.listing.create({
@@ -91,7 +91,7 @@ export async function createListing(req: Request, res: Response): Promise<void> 
     if (error instanceof z.ZodError) {
       res.status(400).json({
         success: false,
-        error: error.issues[0].message,
+        error: error.issues?.[0]?.message || 'Validation error',
       });
       return;
     }
@@ -106,7 +106,7 @@ export async function createListing(req: Request, res: Response): Promise<void> 
 
 export async function getListing(req: Request, res: Response): Promise<void> {
   try {
-    const { id } = req.params;
+    const { id } = req.params as any;
 
     const listing = await prisma.listing.findUnique({
       where: { id },
@@ -156,7 +156,7 @@ export async function getListing(req: Request, res: Response): Promise<void> {
 
 export async function listListings(req: Request, res: Response): Promise<void> {
   try {
-    const query = ListingQuerySchema.parse(req.query);
+    const query = ListingQuerySchema.parse(req.query) as any;
     const skip = (query.page - 1) * query.limit;
 
     // Build where clause
@@ -258,7 +258,7 @@ export async function listListings(req: Request, res: Response): Promise<void> {
     if (error instanceof z.ZodError) {
       res.status(400).json({
         success: false,
-        error: error.issues[0].message,
+        error: error.issues?.[0]?.message || 'Validation error',
       });
       return;
     }
@@ -274,7 +274,7 @@ export async function listListings(req: Request, res: Response): Promise<void> {
 export async function updateListing(req: Request, res: Response): Promise<void> {
   try {
     const userId = req.userId;
-    const { id } = req.params;
+    const { id } = req.params as any;
 
     if (!userId) {
       res.status(401).json({
@@ -306,12 +306,12 @@ export async function updateListing(req: Request, res: Response): Promise<void> 
     }
 
     // Validate request body
-    const validatedData = UpdateListingSchema.parse(req.body);
+    const validatedData = UpdateListingSchema.parse(req.body) as any;
 
     // Update listing
     const updatedListing = await prisma.listing.update({
       where: { id },
-      data: validatedData,
+      data: validatedData as any,
     });
 
     res.json({
@@ -323,7 +323,7 @@ export async function updateListing(req: Request, res: Response): Promise<void> 
     if (error instanceof z.ZodError) {
       res.status(400).json({
         success: false,
-        error: error.issues[0].message,
+        error: error.issues?.[0]?.message || 'Validation error',
       });
       return;
     }
@@ -339,7 +339,7 @@ export async function updateListing(req: Request, res: Response): Promise<void> 
 export async function deleteListing(req: Request, res: Response): Promise<void> {
   try {
     const userId = req.userId;
-    const { id } = req.params;
+    const { id } = req.params as any;
 
     if (!userId) {
       res.status(401).json({
@@ -395,7 +395,7 @@ export async function deleteListing(req: Request, res: Response): Promise<void> 
 
 export async function getUserListings(req: Request, res: Response): Promise<void> {
   try {
-    const { userId } = req.params;
+    const { userId } = req.params as any;
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
     const skip = (page - 1) * limit;

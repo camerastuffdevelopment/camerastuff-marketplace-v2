@@ -38,7 +38,7 @@ export async function sendMessage(req: Request, res: Response): Promise<void> {
     }
 
     // Validate request body
-    const validatedData = SendMessageSchema.parse(req.body);
+    const validatedData = SendMessageSchema.parse(req.body) as any;
 
     // Check if listing exists
     const listing = await prisma.listing.findUnique({
@@ -95,7 +95,7 @@ export async function sendMessage(req: Request, res: Response): Promise<void> {
     if (error instanceof z.ZodError) {
       res.status(400).json({
         success: false,
-        error: error.issues[0].message,
+        error: error.issues?.[0]?.message || 'Validation error',
       });
       return;
     }
@@ -326,7 +326,7 @@ export async function getConversations(req: Request, res: Response): Promise<voi
 export async function markAsRead(req: Request, res: Response): Promise<void> {
   try {
     const userId = req.userId;
-    const { id } = req.params;
+    const { id } = req.params as any;
 
     if (!userId) {
       res.status(401).json({
@@ -380,7 +380,7 @@ export async function markAsRead(req: Request, res: Response): Promise<void> {
 export async function markConversationAsRead(req: Request, res: Response): Promise<void> {
   try {
     const userId = req.userId;
-    const { listing_id } = req.params;
+    const { listing_id } = req.params as any;
 
     if (!userId) {
       res.status(401).json({
