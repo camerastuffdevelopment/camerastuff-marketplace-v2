@@ -44,9 +44,24 @@ camerastuff-marketplace-v2/
 │   └── package.json
 │
 ├── CLAUDE.md                     # This file
+├── VERSIONS.md                   # **VERSION DOCS - READ BEFORE CODING**
 ├── README.md                     # Project overview
 └── .gitignore
 ```
+
+## ⚠️ CRITICAL: Read VERSIONS.md Before Coding
+
+**MUST DO BEFORE WRITING ANY CODE:**
+1. Check `VERSIONS.md` for all dependency versions
+2. Review breaking changes for any packages you're updating
+3. Read official documentation for version-specific patterns
+4. Check for known issues in this project with specific versions
+
+This project uses:
+- **Prisma 7** (breaking changes from v6 - see VERSIONS.md)
+- **Express 5** (breaking changes from v4)
+- **Tailwind CSS 4** (breaking changes from v3)
+- **Next.js 14** (using App Router, not Pages Router)
 
 ## Development Commands
 
