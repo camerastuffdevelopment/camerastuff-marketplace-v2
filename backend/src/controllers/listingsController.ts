@@ -2,8 +2,15 @@ import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { z } from 'zod';
 import { ListingResponse } from '../types';
+import { config } from '../config/env';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: config.DATABASE_URL,
+    },
+  },
+});
 
 // Validation schemas
 const CreateListingSchema = z.object({

@@ -6,7 +6,13 @@ import { config } from '../config/env';
 import { UserResponse } from '../types';
 import { z } from 'zod';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: config.DATABASE_URL,
+    },
+  },
+});
 
 // Validation schemas
 const SignupSchema = z.object({
