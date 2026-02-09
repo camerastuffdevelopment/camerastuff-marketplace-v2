@@ -5,12 +5,14 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "ts-node -r dotenv/config --transpile-only src/index.ts",
-    "build": "tsc",
+    "build": "tsc && npm run setup",
     "start": "node dist/index.js",
     "postinstall": "prisma generate",
+    "setup": "node scripts/setup.js",
     "db:migrate": "prisma migrate dev",
     "db:seed": "ts-node -r dotenv/config prisma/seed.ts",
     "db:studio": "prisma studio",
+    "db:push": "prisma db push",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

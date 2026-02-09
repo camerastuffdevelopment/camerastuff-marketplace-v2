@@ -12,7 +12,11 @@
       "Bash(find:*)",
       "Bash(git checkout:*)",
       "Bash(PrismaClientOptions\" error. Added url = env\\(\"DATABASE_URL\"\\) to datasource.\n\nCo-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
-      "WebSearch"
+      "WebSearch",
+      "Bash(node --version:*)",
+      "Bash(npm:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx prisma db push:*)"
     ]
   }
 }
