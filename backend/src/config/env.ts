@@ -1,8 +1,10 @@
 import dotenv from 'dotenv';
 
 // Only load .env file in development. In production (Railway),
-// environment variables are injected directly by the platform
-if (process.env.NODE_ENV !== 'production') {
+// environment variables are injected directly by the platform.
+// We check for DATABASE_URL to detect if we're in production (Railway injects it)
+const isProduction = process.env.DATABASE_URL || process.env.NODE_ENV === 'production';
+if (!isProduction) {
   dotenv.config();
 }
 
