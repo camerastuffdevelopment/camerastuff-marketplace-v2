@@ -8,13 +8,7 @@ import messagesRouter from './routes/messages';
 import uploadRouter from './routes/upload';
 
 // Initialize Prisma client
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: config.DATABASE_URL,
-    },
-  },
-});
+const prisma = new PrismaClient();
 
 // Create Express app
 const app = express();
