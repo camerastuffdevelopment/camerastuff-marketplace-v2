@@ -9,7 +9,9 @@
       "Bash(git push:*)",
       "Bash(grep:*)",
       "Bash(npm run build:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(git checkout:*)",
+      "Bash(PrismaClientOptions\" error. Added url = env\\(\"DATABASE_URL\"\\) to datasource.\n\nCo-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
     ]
   }
 }
