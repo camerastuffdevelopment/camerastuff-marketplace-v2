@@ -16,7 +16,8 @@
       "Bash(node --version:*)",
       "Bash(npm:*)",
       "Bash(npx tsc:*)",
-      "Bash(npx prisma db push:*)"
+      "Bash(npx prisma db push:*)",
+      "Bash(curl:*)"
     ]
   }
 }

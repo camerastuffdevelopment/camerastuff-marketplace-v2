@@ -41,6 +41,12 @@ export default function EmailVerificationPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8 text-center">
+        <button
+          onClick={() => router.push('/')}
+          className="mb-6 text-primary-600 hover:text-primary-700 font-medium text-sm flex items-center gap-1 mx-auto"
+        >
+          ← Back to Home
+        </button>
         <div className="mb-6">
           <div className="flex justify-center mb-4">
             <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center">

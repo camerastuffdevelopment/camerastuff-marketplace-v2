@@ -91,6 +91,12 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
+        <button
+          onClick={() => router.push('/')}
+          className="mb-6 text-primary-600 hover:text-primary-700 font-medium text-sm flex items-center gap-1"
+        >
+          ← Back to Home
+        </button>
         <h1 className="text-3xl font-bold text-gray-900 mb-2 text-center">Create Account</h1>
         <p className="text-gray-600 text-center mb-8">Join GearHub to buy and sell photography gear</p>
 
