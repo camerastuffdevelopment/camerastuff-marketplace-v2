@@ -1,6 +1,10 @@
 import dotenv from 'dotenv';
 
-dotenv.config();
+// Only load .env file in development. In production (Railway),
+// environment variables are injected directly by the platform
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config();
+}
 
 export const config = {
   // Server
