@@ -131,8 +131,19 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="border-t border-gray-700 pt-8 text-sm text-center">
+          <div className="border-t border-gray-700 pt-8 text-sm text-center space-y-2">
             <p>&copy; 2026 GearHub. Powered by CameraStuff. All rights reserved.</p>
+            <p className="text-xs text-gray-400">
+              Version 1.0.0-MVP | Last Updated: {new Date().toLocaleString('en-US', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+              })} UTC
+            </p>
           </div>
         </div>
       </footer>
