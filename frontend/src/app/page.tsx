@@ -134,15 +134,16 @@ export default function Home() {
           <div className="border-t border-gray-700 pt-8 text-sm text-center space-y-2">
             <p>&copy; 2026 GearHub. Powered by CameraStuff. All rights reserved.</p>
             <p className="text-xs text-gray-400">
-              Version 1.0.0-MVP | Last Updated: {new Date().toLocaleString('en-US', {
+              Version 1.0.0-MVP | Last Updated: {new Date().toLocaleString('en-ZA', {
                 year: 'numeric',
                 month: '2-digit',
                 day: '2-digit',
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',
-                hour12: true
-              })} UTC
+                hour12: false,
+                timeZone: 'Africa/Johannesburg'
+              })} SAST
             </p>
           </div>
         </div>
