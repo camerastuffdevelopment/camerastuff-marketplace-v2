@@ -2,13 +2,15 @@ import express from 'express';
 import cors from 'cors';
 import { config } from './config/env';
 import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
 import authRouter from './routes/auth';
 import listingsRouter from './routes/listings';
 import messagesRouter from './routes/messages';
 import uploadRouter from './routes/upload';
 
-// Initialize Prisma client
-const prisma = new PrismaClient();
+// Initialize Prisma client with PostgreSQL adapter
+const adapter = new PrismaPg(process.env.DATABASE_URL);
+const prisma = new PrismaClient({ adapter });
 
 // Create Express app
 const app = express();

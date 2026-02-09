@@ -2,11 +2,13 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt, { Secret } from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
 import { config } from '../config/env';
 import { UserResponse } from '../types';
 import { z } from 'zod';
 
-const prisma = new PrismaClient();
+const adapter = new PrismaPg(process.env.DATABASE_URL);
+const prisma = new PrismaClient({ adapter });
 
 // Validation schemas
 const SignupSchema = z.object({

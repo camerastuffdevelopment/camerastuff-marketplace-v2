@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
 import { z } from 'zod';
 import { ListingResponse } from '../types';
 
-const prisma = new PrismaClient();
+const adapter = new PrismaPg(process.env.DATABASE_URL);
+const prisma = new PrismaClient({ adapter });
 
 // Validation schemas
 const CreateListingSchema = z.object({
